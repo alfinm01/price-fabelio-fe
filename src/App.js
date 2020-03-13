@@ -5,7 +5,7 @@ import Box from "@material-ui/core/Box"
 import Container from "@material-ui/core/Container"
 import Detail from "./Components/Detail"
 import Header from "./Components/Header"
-import ItemList from "./Components/ItemList"
+import ProductList from "./Components/ProductList"
 import Submission from "./Components/Submission"
 
 function App() {
@@ -16,11 +16,11 @@ function App() {
         <Switch>
           <Container>
             <Box my={5}>
-              <Route path="/submission">
+              <Route exact path="/">
                 <Submission />
               </Route>
-              <Route path="/item-list">
-                <ItemList />
+              <Route path="/product-list">
+                <ProductList />
               </Route>
               <Route path="/detail/:id">
                 <Detail />

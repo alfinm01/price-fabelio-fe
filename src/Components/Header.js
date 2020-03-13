@@ -27,10 +27,10 @@ function HeaderComponent(props) {
           </Typography>
           <Button
             component={Link}
-            to="/submission"
+            to="/"
             color="inherit"
             style={
-              path === "/submission"
+              path === "/"
                 ? { color: "yellow", textTransform: "none" }
                 : { color: "white", textTransform: "none" }
             }
@@ -39,15 +39,15 @@ function HeaderComponent(props) {
           </Button>
           <Button
             component={Link}
-            to="/item-list"
+            to="/product-list"
             color="inherit"
             style={
-              path === "/item-list"
+              path === "/product-list"
                 ? { color: "yellow", textTransform: "none" }
                 : { color: "white", textTransform: "none" }
             }
           >
-            Item List
+            Product List
           </Button>
           <Button
             component={Link}
