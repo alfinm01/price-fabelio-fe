@@ -1,6 +1,8 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 // import './App.css';
+import Box from "@material-ui/core/Box"
+import Container from "@material-ui/core/Container"
 import Detail from "./Components/Detail"
 import Header from "./Components/Header"
 import ItemList from "./Components/ItemList"
@@ -12,15 +14,19 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          <Route path="/submission">
-            <Submission />
-          </Route>
-          <Route path="/item-list">
-            <ItemList />
-          </Route>
-          <Route path="/detail/:id">
-            <Detail />
-          </Route>
+          <Container>
+            <Box my={5}>
+              <Route path="/submission">
+                <Submission />
+              </Route>
+              <Route path="/item-list">
+                <ItemList />
+              </Route>
+              <Route path="/detail/:id">
+                <Detail />
+              </Route>
+            </Box>
+          </Container>
         </Switch>
       </div>
     </Router>
