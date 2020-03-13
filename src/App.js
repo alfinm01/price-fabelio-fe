@@ -1,14 +1,10 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
-//import './App.css';
-import Detail from './Components/Detail.js';
-import Header from './Components/Header.js';
-import ItemList from './Components/ItemList.js';
-import Submission from './Components/Submission.js';
+import React from "react"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+// import './App.css';
+import Detail from "./Components/Detail"
+import Header from "./Components/Header"
+import ItemList from "./Components/ItemList"
+import Submission from "./Components/Submission"
 
 function App() {
   return (
@@ -28,7 +24,7 @@ function App() {
         </Switch>
       </div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

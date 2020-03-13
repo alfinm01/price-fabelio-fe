@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react"
 
 function ItemList() {
-  return (
-    <div>
-    	This is item list page.
-    </div>
-  );
+  return <div>This is item list page.</div>
 }
 
-export default ItemList;
+export default ItemList
