@@ -1,3 +1,3 @@
-const API = "http://api-price-fabelio.herokuapp.com"
+const API = "https://api-price-fabelio.herokuapp.com"
 
 export default API

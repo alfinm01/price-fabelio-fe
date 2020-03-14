@@ -1,6 +1,6 @@
 # Fabelio Price Monitoring Front-end
 
-Web app is accessible on [price-fabelio.herokuapp.com](http://price-fabelio.herokuapp.com).<br />
+Web app is accessible on [price-fabelio.herokuapp.com](https://price-fabelio.herokuapp.com).<br />
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

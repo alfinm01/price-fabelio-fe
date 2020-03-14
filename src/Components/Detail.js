@@ -72,7 +72,8 @@ class Detail extends React.Component {
                   borderColor: [
                     ...this.state.data.datasets[0].borderColor,
                     "rgba(255, 99, 132, 1)"
-                  ]
+                  ],
+                  borderWidth: 1
                 }
               ]
             }
