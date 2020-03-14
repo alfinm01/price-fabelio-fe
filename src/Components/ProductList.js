@@ -71,7 +71,7 @@ class ProductList extends React.Component {
           </Typography>
           <Typography color="inherit" variant="subtitle1">
             Berikut adalah produk-produk{" "}
-            <MUILink href="http://fabelio.com" target="_blank">
+            <MUILink href="https://fabelio.com" target="_blank">
               fabelio.com
             </MUILink>{" "}
             yang sedang di-monitor

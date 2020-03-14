@@ -41,7 +41,7 @@ function Submission() {
           </Typography>
           <Typography color="inherit" variant="subtitle1">
             Masukkan link product page yang valid dari{" "}
-            <Link href="http://fabelio.com" target="_blank">
+            <Link href="https://fabelio.com" target="_blank">
               fabelio.com
             </Link>
           </Typography>

@@ -52,32 +52,32 @@ class Detail extends React.Component {
           product: response.data.product
         })
         response.data.prices.map(price =>
-          this.setState({
+          this.setState(prevState => ({
             data: {
               labels: [
-                ...this.state.data.labels,
+                ...prevState.data.labels,
                 new Date(price.time).toLocaleString()
               ],
               datasets: [
                 {
                   label: "Price every hour",
                   data: [
-                    ...this.state.data.datasets[0].data,
+                    ...prevState.data.datasets[0].data,
                     parseInt(price.price.match(/\d/g).join(""), 10)
                   ],
                   backgroundColor: [
-                    ...this.state.data.datasets[0].backgroundColor,
+                    ...prevState.data.datasets[0].backgroundColor,
                     "rgba(255, 99, 132, 0.2)"
                   ],
                   borderColor: [
-                    ...this.state.data.datasets[0].borderColor,
+                    ...prevState.data.datasets[0].borderColor,
                     "rgba(255, 99, 132, 1)"
                   ],
                   borderWidth: 1
                 }
               ]
             }
-          })
+          }))
         )
       })
       .catch(error => {
