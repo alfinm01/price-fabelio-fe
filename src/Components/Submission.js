@@ -1,14 +1,39 @@
 import React from "react"
+import { Redirect } from "react-router-dom"
 import Grid from "@material-ui/core/Grid"
 import Link from "@material-ui/core/Link"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import TextField from "@material-ui/core/TextField"
+import axios from "axios"
+import API from "../config"
 
 function Submission() {
+  const [id, setId] = React.useState()
   const [link, setLink] = React.useState()
+  const [disabled, setDisabled] = React.useState(false)
+  const [fireRedirect, setFireRedirect] = React.useState(false)
+
+  const handleSubmit = event => {
+    event.preventDefault()
+    setDisabled(true)
+    axios
+      .post(`${API}/create-submission`, { link })
+      .then(response => {
+        console.log(response)
+        setId(response.data.product.id)
+        setFireRedirect(true)
+        setDisabled(false)
+        setLink("")
+      })
+      .catch(error => {
+        setDisabled(false)
+        console.log(error)
+      })
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Grid container spacing={3} justify="center">
         <Grid item xs={12}>
           <Typography color="inherit" variant="h6">
@@ -36,9 +61,11 @@ function Submission() {
             variant="outlined"
             fullWidth
             style={{ textTransform: "none" }}
+            disabled={disabled}
           >
             Submit
           </Button>
+          {fireRedirect && <Redirect to={`/detail/${id}`} />}
         </Grid>
       </Grid>
     </form>

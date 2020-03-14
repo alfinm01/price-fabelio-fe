@@ -1,172 +1,214 @@
 import React from "react"
+import { withRouter } from "react-router-dom"
 import Grid from "@material-ui/core/Grid"
 import Link from "@material-ui/core/Link"
+import Card from "@material-ui/core/Card"
+import CardMedia from "@material-ui/core/CardMedia"
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons"
 import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
-import Paper from "@material-ui/core/Paper"
-import Grow from "@material-ui/core/Grow"
+import { withStyles } from "@material-ui/core/styles"
 import { Bar } from "react-chartjs-2"
+import PropTypes from "prop-types"
+import axios from "axios"
+import API from "../config"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = () => ({
   root: {
-    height: 180
+    maxWidth: 345
   },
-  container: {
-    display: "flex"
-  },
-  paper: {
-    margin: theme.spacing(1)
-  },
-  svg: {
-    width: 100,
-    height: 100
-  },
-  polygon: {
-    fill: theme.palette.common.white,
-    stroke: theme.palette.divider,
-    strokeWidth: 1
+  media: {
+    height: 200
   }
-}))
+})
 
-function Detail() {
-  const classes = useStyles()
-  const [checked, setChecked] = React.useState(false)
-  const data = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)"
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)"
-        ],
-        borderWidth: 1
+class Detail extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      imageNumber: 0,
+      product: {},
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: "Price every hour",
+            data: [],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1
+          }
+        ]
       }
-    ]
+    }
   }
 
-  return (
-    <Grid container spacing={3} justify="center" alignItems="center">
-      <Grid item xs={12} md={6}>
-        <Grid container>
-          <Grid item xs={1}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={() => setChecked(!checked)}
-            >
-              <ArrowBackIos />
-            </IconButton>
-          </Grid>
-          <Grid item xs={10}>
-            <div className={classes.container}>
-              <Grow in={checked}>
-                <Paper elevation={4} className={classes.paper}>
-                  <svg className={classes.svg}>
-                    <polygon
-                      points="0,100 50,00, 100,100"
-                      className={classes.polygon}
-                    />
-                  </svg>
-                </Paper>
-              </Grow>
-              {/* Conditionally applies the timeout prop to change the entry speed. */}
-              <Grow
-                in={checked}
-                style={{ transformOrigin: "0 0 0" }}
-                {...(checked ? { timeout: 1000 } : {})}
-              >
-                <Paper elevation={4} className={classes.paper}>
-                  <svg className={classes.svg}>
-                    <polygon
-                      points="0,100 50,00, 100,100"
-                      className={classes.polygon}
-                    />
-                  </svg>
-                </Paper>
-              </Grow>
-            </div>
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={() => setChecked(!checked)}
-            >
-              <ArrowForwardIos />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography color="inherit" variant="h5">
-              <Link
-                href="https://fabelio.com/ip/meja-makan-cessi-white-new.html"
-                target="_blank"
-              >
-                Nama Produk
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography color="inherit" variant="h6">
-              Current Price: Rp1.000.000,00
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography color="inherit" variant="subtitle1">
-              Tentang Produk Ini Hangatkan Momen Bersantap Bersama Bersantap
-              dengan keluarga membutuhkan meja yang sanggup memenuhi seluruh
-              rangkaian menu favorit setiap anggota. Meja Makan Cessi
-              menyediakan solusi tempat yang lapang untuk menempatkan seluruh
-              hidangan dengan minimalis, namun tidak menjauhkannya dari kepuasan
-              estetik. Dengan table top yang putih, Meja Makan Cessi menjadi
-              lebih terlihat modern. Dari sarapan pagi hingga makan es krim di
-              minggu siang, semuanya menjadi sedikit lebih seru dan semangat
-              dengan Cessi Dining Table.
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Bar
-          data={data}
-          width={100}
-          height={50}
-          options={{
-            scales: {
-              yAxes: [
+  componentDidMount() {
+    const { props } = this
+    axios
+      .get(`${API}/get-product-by-id/${props.match.params.id}`)
+      .then(response => {
+        this.setState({
+          product: response.data.product
+        })
+        response.data.prices.map(price =>
+          this.setState({
+            data: {
+              labels: [
+                ...this.state.data.labels,
+                new Date(price.time).toLocaleString()
+              ],
+              datasets: [
                 {
-                  ticks: {
-                    beginAtZero: true
-                  }
+                  label: "Price every hour",
+                  data: [
+                    ...this.state.data.datasets[0].data,
+                    parseInt(price.price.match(/\d/g).join(""), 10)
+                  ],
+                  backgroundColor: [
+                    ...this.state.data.datasets[0].backgroundColor,
+                    "rgba(255, 99, 132, 0.2)"
+                  ],
+                  borderColor: [
+                    ...this.state.data.datasets[0].borderColor,
+                    "rgba(255, 99, 132, 1)"
+                  ]
                 }
               ]
             }
-          }}
-        />
+          })
+        )
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  showImage() {
+    const { classes } = this.props
+    const { state } = this
+    console.log(state.data)
+    if (state.imageNumber % 3 === 0) {
+      return (
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.media}
+            image={state.product.image1}
+            title="Image 1"
+          />
+        </Card>
+      )
+    }
+    if (state.imageNumber % 3 === 1) {
+      return (
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.media}
+            image={state.product.image2}
+            title="Image 2"
+          />
+        </Card>
+      )
+    }
+    if (state.imageNumber % 3 === 2) {
+      return (
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.media}
+            image={state.product.image3}
+            title="Image 3"
+          />
+        </Card>
+      )
+    }
+    return ""
+  }
+
+  render() {
+    const { state } = this
+    return (
+      <Grid container spacing={3} justify="center" alignItems="center">
+        <Grid item xs={12} md={6}>
+          <Grid container justify="center" alignItems="center">
+            <Grid item xs={1}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={() =>
+                  this.setState({ imageNumber: state.imageNumber - 1 })
+                }
+              >
+                <ArrowBackIos />
+              </IconButton>
+            </Grid>
+            <Grid item xs={10} alignContent="center">
+              {this.showImage()}
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={() =>
+                  this.setState({ imageNumber: state.imageNumber + 1 })
+                }
+              >
+                <ArrowForwardIos />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography color="inherit" variant="h5">
+                <Link
+                  href="https://fabelio.com/ip/meja-makan-cessi-white-new.html"
+                  target="_blank"
+                >
+                  {state.product.name}
+                </Link>
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography color="inherit" variant="h6">
+                Current Price: {state.product.latest_price}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography color="inherit" variant="subtitle1">
+                {state.product.description}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Bar
+            data={state.data}
+            width={100}
+            height={50}
+            options={{
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }
+                ]
+              }
+            }}
+          />
+        </Grid>
       </Grid>
-    </Grid>
-  )
+    )
+  }
 }
 
-export default Detail
+Detail.propTypes = {
+  classes: PropTypes.isRequired,
+  match: PropTypes.isRequired
+}
+
+export default withRouter(withStyles(useStyles)(Detail))

@@ -48,14 +48,21 @@ class ProductList extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    const results = await axios.get(`${API}/get-all-products`)
-    console.log(results)
-    this.setState({ products: results.data.results })
+  componentDidMount() {
+    axios
+      .get(`${API}/get-all-products`)
+      .then(response => {
+        console.log(response)
+        this.setState({ products: response.data.results })
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   render() {
     const { classes } = this.props
+    const { state } = this
     return (
       <Grid container spacing={3} justify="center">
         <Grid item xs={12}>
@@ -82,13 +89,13 @@ class ProductList extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.state.products.map(product => (
+                {state.products.map(product => (
                   <StyledTableRow key={product.name}>
                     <StyledTableCell component="th" scope="row">
                       {product.name}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {`${product.description.slice(0, 30)}...`}
+                      {`${product.description.slice(0, 50)}...`}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {product.latest_price}
