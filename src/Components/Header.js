@@ -49,14 +49,6 @@ function HeaderComponent(props) {
           >
             Product List
           </Button>
-          <Button
-            component={Link}
-            to="/detail/1"
-            color="inherit"
-            style={{ color: "white", textTransform: "none" }}
-          >
-            Detail
-          </Button>
         </Toolbar>
       </AppBar>
     </div>
